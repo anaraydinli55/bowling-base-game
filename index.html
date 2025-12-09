@@ -1,2 +1,42 @@
-/assets/bowling.png
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Base Bowling</title>
+  <style>
+    body { 
+      background-color: black; 
+      color: #9b59b6; 
+      text-align: center; 
+      font-family: Arial, sans-serif;
+    }
+    #canvas { 
+      border: 2px solid #9b59b6; 
+      margin-top: 20px; 
+    }
+    button {
+      background-color: #9b59b6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Base Bowling</h1>
+  <canvas id="canvas" width="600" height="400"></canvas>
+  <div>
+    <button id="connectWallet">Connect Wallet</button>
+    <button id="throwBtn">Throw 🎳</button>
+  </div>
+  <p>XP: <span id="xp">0</span> | Throws: <span id="throws">0</span></p>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.8.0/dist/ethers.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
 
