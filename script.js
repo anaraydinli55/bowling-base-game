@@ -1,4 +1,5 @@
-let provider, signer, contract;
+import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.8.0/dist/ethers.min.js";
+
 const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC"; // Remix deploy sonrası
 const contractABI = [
   "function bowl() external",
@@ -6,12 +7,13 @@ const contractABI = [
   "event Bowled(address indexed player, uint256 totalXp, uint256 totalThrows)"
 ];
 
+let provider, signer, contract;
+
 // Canvas setup
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const img = new Image();
-img.src = "./public/bowling.png";
-
+img.src = "/bowling.png";  // ✅ Vercel uyumlu
 img.onload = () => {
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 }
@@ -26,9 +28,9 @@ document.getElementById("connectWallet").onclick = async () => {
     alert("Wallet connected!");
     updatePlayerInfo();
   } else {
-    alert("MetaMask / Base wallet required!");
+    alert("MetaMask veya Base Wallet gerekiyor!");
   }
-}
+};
 
 // Throw button
 document.getElementById("throwBtn").onclick = async () => {
@@ -41,7 +43,7 @@ document.getElementById("throwBtn").onclick = async () => {
     console.error(e);
     alert("Transaction failed!");
   }
-}
+};
 
 // Update XP and Throws
 async function updatePlayerInfo() {
@@ -53,8 +55,11 @@ async function updatePlayerInfo() {
 }
 
 // Listen events
-if (typeof contract !== "undefined") {
+function listenEvents() {
+  if (!contract) return;
   contract.on("Bowled", (player, totalXp, totalThrows) => {
     updatePlayerInfo();
   });
 }
+
+setTimeout(listenEvents, 1000); // contract hazır olduktan sonra dinle
