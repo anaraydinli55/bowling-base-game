@@ -1,5 +1,5 @@
 let provider, signer, contract;
-const contractAddress = "SENIN_CONTRACT_ADRESIN"; // Remix deploy sonrası
+const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC"; // Remix deploy sonrası
 const contractABI = [
   "function bowl() external",
   "function getPlayer(address player) view returns(uint256,uint256)",
