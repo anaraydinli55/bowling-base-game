@@ -1,6 +1,3 @@
-alert("SCRIPT WORKS");
-
-
 window.addEventListener("DOMContentLoaded", () => {
 
   const canvas = document.getElementById("canvas");
@@ -13,6 +10,10 @@ window.addEventListener("DOMContentLoaded", () => {
   const PIN_RADIUS = 10;
   const gravity = 0.2;
   const friction = 0.99;
+
+  // Bowling top görseli
+  const ballImg = new Image();
+  ballImg.src = "bowling.png";
 
   function createPins() {
     pins = [];
@@ -36,7 +37,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   function throwBall() {
     if (ball) return;
-    console.log("THROW"); // test için
 
     ball = {
       x: 80,
@@ -53,21 +53,20 @@ window.addEventListener("DOMContentLoaded", () => {
   function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+    // Top hareketi ve çizimi
     if (ball) {
       ball.x += ball.vx;
       ball.y += ball.vy;
       ball.vy += gravity;
 
-      ctx.fillStyle = "#f1c40f";
-      ctx.beginPath();
-      ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.drawImage(ballImg, ball.x - ball.r, ball.y - ball.r, ball.r*2, ball.r*2);
 
       if (ball.x > canvas.width || ball.y > canvas.height) {
         ball = null;
       }
     }
 
+    // Pinlerin hareketi ve çarpışma
     pins.forEach(pin => {
       const dx = pin.x - (ball?.x ?? -999);
       const dy = pin.y - (ball?.y ?? -999);
