@@ -1,65 +1,117 @@
-import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@6.8.0/dist/ethers.min.js";
-
-const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC"; // Remix deploy sonrası
-const contractABI = [
-  "function bowl() external",
-  "function getPlayer(address player) view returns(uint256,uint256)",
-  "event Bowled(address indexed player, uint256 totalXp, uint256 totalThrows)"
-];
-
-let provider, signer, contract;
-
-// Canvas setup
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const img = new Image();
-img.src = "/bowling.png";  // Vercel uyumlu
-img.onload = () => {
-  ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+let xp = 0;
+let throwsCount = 0;
+
+// 🎳 Ball
+let ball = null;
+
+// 🧴 Pins
+let pins = [];
+const PIN_RADIUS = 10;
+
+// Physics
+const gravity = 0.2;
+const friction = 0.99;
+
+// Create pins (triangle)
+function createPins() {
+  pins = [];
+  let startX = 420;
+  let startY = 200;
+  let rows = 4;
+  let gap = 26;
+
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c <= r; c++) {
+      pins.push({
+        x: startX + c * gap - r * gap / 2,
+        y: startY + r * gap,
+        vx: 0,
+        vy: 0,
+        fallen: false
+      });
+    }
+  }
 }
 
-// Wallet Connect
-document.getElementById("connectWallet").onclick = async () => {
-  if (window.ethereum) {
-    provider = new ethers.BrowserProvider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
-    signer = await provider.getSigner();
-    contract = new ethers.Contract(contractAddress, contractABI, signer);
-    alert("Wallet connected!");
-    await updatePlayerInfo();
-    listenEvents();
-  } else {
-    alert("MetaMask veya Base Wallet gerekiyor!");
-  }
-};
+// Create ball
+function throwBall() {
+  if (ball) return;
 
-// Throw button
-document.getElementById("throwBtn").onclick = async () => {
-  if (!contract) return alert("Connect wallet first!");
-  try {
-    const tx = await contract.bowl();
-    await tx.wait();               // TX tamamlanmasını bekle
-    await updatePlayerInfo();      // XP ve throw sayısını güncelle
-  } catch (e) {
-    console.error(e);
-    alert("Transaction failed!");
-  }
-};
+  ball = {
+    x: 80,
+    y: 320,
+    vx: 8,
+    vy: -1,
+    r: 12
+  };
 
-// Update XP and Throws
-async function updatePlayerInfo() {
-  if (!signer || !contract) return;
-  const address = await signer.getAddress();
-  const [xp, throwsCount] = await contract.getPlayer(address);
-  document.getElementById("xp").innerText = xp;
-  document.getElementById("throws").innerText = throwsCount;
+  throwsCount++;
+  document.getElementById("throws").textContent = throwsCount;
 }
 
-// Listen events
-function listenEvents() {
-  if (!contract) return;
-  contract.on("Bowled", (player, totalXp, totalThrows) => {
-    updatePlayerInfo();
+// Collision
+function collide(ball, pin) {
+  const dx = pin.x - ball.x;
+  const dy = pin.y - ball.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  return dist < pin.r + ball.r;
+}
+
+// Update physics
+function update() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Ball movement
+  if (ball) {
+    ball.x += ball.vx;
+    ball.y += ball.vy;
+    ball.vy += gravity;
+
+    // Draw ball
+    ctx.fillStyle = "#f1c40f";
+    ctx.beginPath();
+    ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Remove ball if out
+    if (ball.x > canvas.width || ball.y > canvas.height) {
+      ball = null;
+    }
+  }
+
+  // Pins
+  pins.forEach(pin => {
+    if (ball && !pin.fallen && collide(ball, { ...pin, r: PIN_RADIUS })) {
+      pin.vx = ball.vx * 0.6;
+      pin.vy = -4;
+      pin.fallen = true;
+      xp += 10;
+      document.getElementById("xp").textContent = xp;
+    }
+
+    pin.vy += gravity;
+    pin.x += pin.vx;
+    pin.y += pin.vy;
+
+    pin.vx *= friction;
+    pin.vy *= friction;
+
+    // Draw pin
+    ctx.fillStyle = pin.fallen ? "#555" : "#ffffff";
+    ctx.beginPath();
+    ctx.arc(pin.x, pin.y, PIN_RADIUS, 0, Math.PI * 2);
+    ctx.fill();
   });
+
+  requestAnimationFrame(update);
 }
 
+// Button
+document.getElementById("throwBtn").addEventListener("click", throwBall);
+
+// Init
+createPins();
+update();
