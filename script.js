@@ -1,3 +1,6 @@
+alert("SCRIPT WORKS");
+
+
 window.addEventListener("DOMContentLoaded", () => {
 
   const canvas = document.getElementById("canvas");
