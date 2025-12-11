@@ -13,8 +13,9 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Bowling top görseli
   const ballImg = new Image();
-  ballImg.src = "bowling.png";
+  ballImg.src = "bowling.png"; // repoda olmalı
 
+  // Pinler için daire kullanıyoruz
   function createPins() {
     pins = [];
     let startX = 420;
@@ -36,7 +37,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function throwBall() {
-    if (ball) return;
+    if (ball) return; // top zaten hareket ediyorsa tekrar atılmasın
 
     ball = {
       x: 80,
@@ -95,8 +96,15 @@ window.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(update);
   }
 
+  // Throw butonu
   document.getElementById("throwBtn")
     .addEventListener("click", throwBall);
+
+  // Wallet bağlama simülasyonu (demo)
+  document.getElementById("connectWallet")
+    .addEventListener("click", () => {
+      alert("Wallet connected! (demo)");
+    });
 
   createPins();
   update();
