@@ -1,20 +1,37 @@
-// Ethers.js Base tx için
-async function sendThrowTx() {
-  if (!window.ethereum) return alert("Install MetaMask or compatible wallet");
+let xp = 0;
+let throwsCount = 0;
+let signer;
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const account = await signer.getAddress();
-
-  // Örnek: Base testnet üzerindeki dummy contract veya hesap adresine 0 ETH göndermek
+// Connect Wallet
+document.getElementById("connectWallet").addEventListener("click", async () => {
+  if (!window.ethereum) return alert("Install MetaMask");
   try {
+    await window.ethereum.request({ method: 'eth_requestAccounts' });
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    signer = await provider.getSigner();
+    const account = await signer.getAddress();
+    alert("Wallet connected: " + account);
+  } catch (err) {
+    console.error(err);
+    alert("Wallet connection failed");
+  }
+});
+
+// Throw / TX Base Mainnet
+document.getElementById("throwBtn").addEventListener("click", async () => {
+  if (!signer) return alert("Connect your wallet first");
+  try {
+    const account = await signer.getAddress();
+
+    // Base mainnet tx: kendine küçük miktar (demo) gönder
     const tx = await signer.sendTransaction({
-      to: account, // kendine gönder, demo amaçlı
-      value: ethers.utils.parseEther("0.0001"), // küçük miktar
+      to: account, 
+      value: ethers.parseEther("0.00001"), 
       gasLimit: 21000
     });
+
     console.log("TX sent:", tx.hash);
-    alert(`Throw sent! TX hash: ${tx.hash}`);
+    alert("Throw sent! TX hash: " + tx.hash);
 
     // TX başarılı olunca XP ve Throws artır
     throwsCount++;
@@ -26,6 +43,4 @@ async function sendThrowTx() {
     console.error(err);
     alert("TX failed: " + err.message);
   }
-}
-
-document.getElementById("throwBtn").addEventListener("click", sendThrowTx);
+});
