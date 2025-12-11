@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Base Bowling *by anaraydinli</title>
+  <title>Base Bowling  by anaraydinli</title>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.1/dist/ethers.min.js"></script>
   <style>
     body { 
       background-color: black; 
@@ -13,7 +14,8 @@
     img {
       display: block;
       margin: 20px auto;
-      width: 200px;
+      width: 400px; /* görsel büyük */
+      height: auto;
     }
     button {
       background-color: #9b59b6;
@@ -31,7 +33,7 @@
 
   <h1>Base Bowling</h1>
 
-  <!-- Sabit görsel -->
+  <!-- Büyük sabit görsel -->
   <img src="bowling.png" alt="Bowling Game">
 
   <div>
@@ -41,6 +43,43 @@
 
   <p>XP: <span id="xp">0</span> | Throws: <span id="throws">0</span></p>
 
-  <script src="script.js"></script>
-</body>
-</html>
+  <script>
+    let xp = 0;
+    let throwsCount = 0;
+    let signer;
+
+    // Connect Wallet ve signer oluşturma
+    document.getElementById("connectWallet").addEventListener("click", async () => {
+      if (!window.ethereum) return alert("Install MetaMask or compatible wallet");
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        await provider.send("eth_requestAccounts", []);
+        signer = await provider.getSigner();
+        const account = await signer.getAddress();
+        alert("Wallet connected: " + account);
+      } catch (err) {
+        console.error(err);
+        alert("Wallet connection failed");
+      }
+    });
+
+    // Throw butonu Base ağına tx ve XP/Throws
+    document.getElementById("throwBtn").addEventListener("click", async () => {
+      if (!signer) return alert("Connect your wallet first");
+
+      try {
+        const account = await signer.getAddress();
+
+        // Demo amaçlı küçük TX kendine gönderiliyor (low fee)
+        const tx = await signer.sendTransaction({
+          to: account,
+          value: ethers.parseEther("0.00001"),
+          gasLimit: 21000
+        });
+        console.log("TX sent:", tx.hash);
+        alert("Throw sent! TX hash: " + tx.hash);
+
+        // TX başarılı olunca XP ve Throws artır
+        throwsCount++;
+        xp += 10;
+        document.getElementById("throws").textC
