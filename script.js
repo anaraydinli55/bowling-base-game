@@ -2,31 +2,49 @@ let xp = 0;
 let throwsCount = 0;
 let signer;
 
-// Connect Wallet
-document.getElementById("connectWallet").addEventListener("click", async () => {
-  if (!window.ethereum) return alert("Install MetaMask");
-  try {
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
-    const provider = new ethers.BrowserProvider(window.ethereum);
-    signer = await provider.getSigner();
-    const account = await signer.getAddress();
-    alert("Wallet connected: " + account);
-  } catch (err) {
-    console.error(err);
-    alert("Wallet connection failed");
+// Web3Modal Setup (MetaMask, Rabby, Coinbase, WalletConnect)
+const web3Modal = new window.Web3Modal.default({
+  cacheProvider: false,
+  theme: "dark",
+  providerOptions: {
+    injected: { package: null }, // MetaMask, Rabby, Coinbase
+    walletconnect: {
+      package: window.WalletConnectProvider,
+      options: {
+        rpc: {
+          8453: "https://mainnet.base.org" // Base Mainnet
+        }
+      }
+    }
   }
 });
 
-// Throw / TX Base Mainnet
+// Connect Wallet
+document.getElementById("connectWallet").addEventListener("click", async () => {
+  try {
+    const providerInstance = await web3Modal.connect();
+    const provider = new ethers.BrowserProvider(providerInstance);
+    signer = await provider.getSigner();
+    const account = await signer.getAddress();
+    alert("Wallet connected: " + account);
+    console.log("Signer ready:", signer);
+  } catch (err) {
+    console.error(err);
+    alert("Wallet connection failed: " + err.message);
+  }
+});
+
+// Throw / TX Base Mainnet (demo low fee)
 document.getElementById("throwBtn").addEventListener("click", async () => {
   if (!signer) return alert("Connect your wallet first");
+
   try {
     const account = await signer.getAddress();
 
-    // Base mainnet tx: kendine küçük miktar (demo) gönder
+    // Demo TX: kendine küçük miktar ETH gönder
     const tx = await signer.sendTransaction({
-      to: account, 
-      value: ethers.parseEther("0.00001"), 
+      to: account,
+      value: ethers.parseEther("0.00001"),
       gasLimit: 21000
     });
 
