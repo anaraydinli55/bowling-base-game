@@ -13,9 +13,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   // Bowling top görseli
   const ballImg = new Image();
-  ballImg.src = "bowling.png"; // repoda olmalı
+  ballImg.src = "bowling.png"; // repodaki yol doğru olmalı
 
-  // Pinler için daire kullanıyoruz
   function createPins() {
     pins = [];
     let startX = 420;
@@ -37,7 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 
   function throwBall() {
-    if (ball) return; // top zaten hareket ediyorsa tekrar atılmasın
+    if (ball) return;
 
     ball = {
       x: 80,
@@ -54,12 +53,13 @@ window.addEventListener("DOMContentLoaded", () => {
   function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Top hareketi ve çizimi
-    if (ball) {
+    // Top hareketi ve görsel çizim
+    if (ball && ballImg.complete) {
       ball.x += ball.vx;
       ball.y += ball.vy;
       ball.vy += gravity;
 
+      // Daire yerine görsel
       ctx.drawImage(ballImg, ball.x - ball.r, ball.y - ball.r, ball.r*2, ball.r*2);
 
       if (ball.x > canvas.width || ball.y > canvas.height) {
@@ -67,7 +67,7 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    // Pinlerin hareketi ve çarpışma
+    // Pinler ve çarpışma
     pins.forEach(pin => {
       const dx = pin.x - (ball?.x ?? -999);
       const dy = pin.y - (ball?.y ?? -999);
@@ -96,11 +96,9 @@ window.addEventListener("DOMContentLoaded", () => {
     requestAnimationFrame(update);
   }
 
-  // Throw butonu
   document.getElementById("throwBtn")
     .addEventListener("click", throwBall);
 
-  // Wallet bağlama simülasyonu (demo)
   document.getElementById("connectWallet")
     .addEventListener("click", () => {
       alert("Wallet connected! (demo)");
