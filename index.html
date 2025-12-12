@@ -12,7 +12,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       text-align: center;
     }
     img {
@@ -42,51 +42,15 @@
 </head>
 <body>
   <h1>Bowling Spin</h1>
-  <!-- Bowling görseli -->
   <img src="bowling.png" alt="Bowling Ball">
-  
+
   <button id="connectBtn">Connect Wallet</button>
   <button id="spinBtn">Spin</button>
-  
+
   <div class="stats">
     XP: <span id="xp">0</span> | Spins: <span id="spins">0</span>
   </div>
 
   <!-- Ethers + Web3Modal CDN -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js"></script>
-  
-  <script>
-    const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC";
-    const contractABI = ["function spin() public"];
-
-    let provider, signer, contract;
-    let xp = 0, spins = 0;
-
-    async function connectWallet() {
-      const web3Modal = new window.Web3Modal.default();
-      const connection = await web3Modal.connect();
-      provider = new ethers.providers.Web3Provider(connection);
-      signer = provider.getSigner();
-      contract = new ethers.Contract(contractAddress, contractABI, signer);
-      alert("Wallet connected: " + await signer.getAddress());
-    }
-
-    async function spin() {
-      if (!contract) {
-        alert("Please connect wallet first!");
-        return;
-      }
-      try {
-        const tx = await contract.spin();
-        console.log("Transaction sent:", tx.hash);
-        await tx.wait();
-        console.log("Transaction confirmed!");
-
-        // Frontend XP / Spins artımı
-        xp += Math.floor(Math.random() * 10) + 1;
-        spins += 1;
-        document.getElementById("xp").innerText = xp;
-        document.getElementById("spins").innerText = spins;
-      } catch (err) {
-        console.error
+  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/di
