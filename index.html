@@ -2,40 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Base Bowling Spin</title>
-
-  <!-- Ethers v6 -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
-
-  <!-- Web3Modal v1 (stabil) -->
-  <script src="https://unpkg.com/web3modal@1.9.12/dist/index.js"></script>
-  <script src="https://unpkg.com/@walletconnect/web3-provider@1.7.8/dist/umd/index.min.js"></script>
-
+  <title>Bowling Spin</title>
   <style>
-    body { background: black; color: white; font-family: Arial; text-align: center; padding-top: 20px; }
-    #gameImage { width: 90%; max-width: 500px; margin: 20px auto; display: block; border-radius: 12px; }
-    .button-container { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
-    button { background: #9b59b6; color: white; border: none; padding: 12px 25px; font-size: 18px; border-radius: 10px; cursor: pointer; }
-    #stats { display: flex; justify-content: center; gap: 40px; margin-top: 20px; font-size: 22px; }
+    body {
+      background-color: black;
+      color: #9b59b6; /* neon mor */
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 2px solid #9b59b6;
+      border-radius: 8px;
+      background-color: transparent;
+      color: #9b59b6;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background-color: #9b59b6;
+      color: black;
+    }
+    .stats {
+      margin-top: 20px;
+      font-size: 18px;
+    }
   </style>
 </head>
 <body>
-
-  <h1>🎳 Base Bowling Spin</h1>
-
-  <img id="gameImage" src="bowling.png" alt="Bowling">
-
-  <div class="button-container">
-    <button id="connectBtn">Connect Wallet</button>
-    <button id="spinBtn">SPIN</button>
+  <h1>Bowling Spin</h1>
+  <button id="connectBtn">Connect Wallet</button>
+  <button id="spinBtn">Spin</button>
+  
+  <div class="stats">
+    XP: <span id="xp">0</span> | Spins: <span id="spins">0</span>
   </div>
 
-  <div id="stats">
-    <div>XP: <span id="xp">0</span></div>
-    <div>Spins: <span id="spins">0</span></div>
-  </div>
-
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
