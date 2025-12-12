@@ -2,9 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Base Bowling Spin</title>
+
+  <!-- Ethers v6 -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.13.4/dist/ethers.umd.min.js"></script>
+
+  <!-- Web3Modal v3 + WalletConnect -->
   <script src="https://unpkg.com/@web3modal/wagmi@3.5.7/dist/index.js"></script>
+
   <style>
     body { background: black; color: white; font-family: Arial; text-align: center; padding-top: 20px; }
     #gameImage { width: 90%; max-width: 500px; margin: 20px auto; display: block; border-radius: 12px; }
@@ -14,19 +20,11 @@
   </style>
 </head>
 <body>
+
   <h1>🎳 Base Bowling Spin</h1>
+
   <img id="gameImage" src="bowling.png" alt="Bowling">
 
   <div class="button-container">
     <button id="connectBtn">Connect Wallet</button>
-    <button id="spinBtn">SPIN</button>
-  </div>
-
-  <div id="stats">
-    <div>XP: <span id="xp">0</span></div>
-    <div>Spins: <span id="spins">0</span></div>
-  </div>
-
-  <script src="script.js"></script>
-</body>
-</html>
+    <button id="spinBtn">SPIN</but
