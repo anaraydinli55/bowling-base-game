@@ -8,29 +8,32 @@ const xpEl = document.getElementById("xp");
 const spinsEl = document.getElementById("spins");
 
 // Web3Modal Setup
-const web3Modal = new window.Web3Modal.default({
-  cacheProvider: false,
-  theme: "dark",
-  providerOptions: {
-    injected: { package: null }, // MetaMask, Rabby, Coinbase
-    walletconnect: {
-      package: window.WalletConnectProvider,
-      options: {
-        rpc: { 8453: "https://mainnet.base.org" } // Base Mainnet
-      }
+const providerOptions = {
+  walletconnect: {
+    package: window.WalletConnectProvider,
+    options: {
+      rpc: { 8453: "https://mainnet.base.org" }, // Base Mainnet
     }
+  },
+  injected: {
+    package: null
   }
+};
+
+const web3Modal = new Web3Modal.default({
+  cacheProvider: false,
+  providerOptions
 });
 
 // Connect Wallet
 document.getElementById("connectBtn").addEventListener("click", async () => {
   try {
     const instance = await web3Modal.connect();
-    provider = new ethers.BrowserProvider(instance);
-    signer = await provider.getSigner();
+    provider = new ethers.providers.Web3Provider(instance);
+    signer = provider.getSigner();
     account = await signer.getAddress();
-    console.log("Wallet connected:", account);
     alert("Wallet connected: " + account);
+    console.log("Connected:", account);
   } catch (err) {
     console.error(err);
     alert("Wallet connection failed: " + err.message);
@@ -47,7 +50,8 @@ document.getElementById("spinBtn").addEventListener("click", async () => {
   try {
     const tx = await signer.sendTransaction({
       to: account,
-      value: 0n // cheapest self-transfer
+      value: ethers.parseEther("0.00001"), // demo small value
+      gasLimit: 21000
     });
 
     console.log("TX sent:", tx.hash);
@@ -57,9 +61,9 @@ document.getElementById("spinBtn").addEventListener("click", async () => {
     xpEl.innerText = xp;
     spinsEl.innerText = spins;
 
-    alert("SPIN successful!\nTX: " + tx.hash);
+    alert("SPIN successful!\nTX Hash: " + tx.hash);
   } catch (err) {
     console.error(err);
-    alert("TX failed: " + err.message);
+    alert("Transaction failed: " + err.message);
   }
 });
