@@ -1,39 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Base Bowling — Spin</title>
+  <meta charset="UTF-8">
+  <title>Base Bowling / SPIN</title>
 
   <style>
     body {
-      background: #000;
+      background: black;
       color: #9b59b6;
       font-family: Arial, sans-serif;
       text-align: center;
-      margin-top: 40px;
+      padding-top: 20px;
     }
-    img { width: 380px; display:block; margin:20px auto; }
+    img {
+      width: 420px;
+      height: auto;
+      display: block;
+      margin: 30px auto;
+    }
     button {
-      background:#9b59b6; color:white;
-      border:none; padding:14px 25px;
-      border-radius:10px; cursor:pointer;
-      font-size:18px; margin-top:15px;
+      background: #9b59b6;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      font-size: 18px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 10px;
     }
-    p { font-size:18px; }
-    small { color:#bbb; }
+    p {
+      font-size: 20px;
+      margin-top: 15px;
+    }
   </style>
 
+  <!-- web3modal + ethers -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.1/dist/ethers.min.js"></script>
-</head>
+  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js"></script>
 
+</head>
 <body>
+
   <h1>🎳 Base Bowling</h1>
-  <img src="bowling.png" />
+
+  <img src="bowling.png" alt="Bowling">
+
+  <button id="connectWallet">Connect Wallet</button>
+  <button id="spinBtn">SPIN 🎳</button>
 
   <p>XP: <span id="xp">0</span> — Spins: <span id="spins">0</span></p>
-  <button id="spinButton">SPIN</button>
-
-  <small id="status">Not connected</small>
 
   <script src="script.js"></script>
 </body>
