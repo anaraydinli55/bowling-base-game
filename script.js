@@ -1,69 +1,52 @@
+import { ethers } from "https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.esm.min.js";
+import Web3Modal from "https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js";
+
+const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC";
+const contractABI = [
+  "function spin() public"
+];
+
 let provider;
 let signer;
-let account;
+let contract;
+
 let xp = 0;
 let spins = 0;
 
-const xpEl = document.getElementById("xp");
-const spinsEl = document.getElementById("spins");
+async function connectWallet() {
+  const web3Modal = new Web3Modal();
+  const connection = await web3Modal.connect();
+  provider = new ethers.providers.Web3Provider(connection);
+  signer = provider.getSigner();
+  contract = new ethers.Contract(contractAddress, contractABI, signer);
+  alert("Wallet connected: " + await signer.getAddress());
+}
 
-// Web3Modal Setup
-const providerOptions = {
-  walletconnect: {
-    package: window.WalletConnectProvider,
-    options: {
-      rpc: { 8453: "https://mainnet.base.org" }, // Base Mainnet
-    }
-  },
-  injected: {
-    package: null
-  }
-};
-
-const web3Modal = new Web3Modal.default({
-  cacheProvider: false,
-  providerOptions
-});
-
-// Connect Wallet
-document.getElementById("connectBtn").addEventListener("click", async () => {
-  try {
-    const instance = await web3Modal.connect();
-    provider = new ethers.providers.Web3Provider(instance);
-    signer = provider.getSigner();
-    account = await signer.getAddress();
-    alert("Wallet connected: " + account);
-    console.log("Connected:", account);
-  } catch (err) {
-    console.error(err);
-    alert("Wallet connection failed: " + err.message);
-  }
-});
-
-// SPIN Button
-document.getElementById("spinBtn").addEventListener("click", async () => {
-  if (!signer) {
-    alert("Connect wallet first!");
+async function spin() {
+  if (!contract) {
+    alert("Please connect wallet first!");
     return;
   }
 
   try {
-    const tx = await signer.sendTransaction({
-      to: account,
-      value: ethers.parseEther("0.00001"), // demo small value
-      gasLimit: 21000
-    });
+    // TX blockchain-ə göndərilir
+    const tx = await contract.spin();
+    console.log("Transaction sent:", tx.hash);
+    await tx.wait();
+    console.log("Transaction confirmed!");
 
-    console.log("TX sent:", tx.hash);
-
-    xp += 10;
+    // Frontend XP / Spins artımı
+    xp += Math.floor(Math.random() * 10) + 1; // random XP artır
     spins += 1;
-    xpEl.innerText = xp;
-    spinsEl.innerText = spins;
 
-    alert("SPIN successful!\nTX Hash: " + tx.hash);
+    document.getElementById("xp").innerText = xp;
+    document.getElementById("spins").innerText = spins;
+
   } catch (err) {
-    console.error(err);
-    alert("Transaction failed: " + err.message);
+    console.error("Spin failed:", err);
+    alert("Spin failed! See console.");
   }
-});
+}
+
+document.getElementById("connectBtn").onclick = connectWallet;
+document.getElementById("spinBtn").onclick = spin;
