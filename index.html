@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Base Bowling / SPIN</title>
+  <title>Base Bowling</title>
 
   <style>
     body {
@@ -10,32 +10,28 @@
       color: #9b59b6;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding-top: 20px;
+      padding-top: 25px;
     }
     img {
-      width: 420px;
-      height: auto;
+      width: 720px;
       display: block;
-      margin: 30px auto;
+      margin: 25px auto;
     }
     button {
       background: #9b59b6;
       color: white;
-      border: none;
       padding: 12px 25px;
-      font-size: 18px;
-      border-radius: 10px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      font-size: 18px;
       margin: 10px;
     }
-    p {
-      font-size: 20px;
-      margin-top: 15px;
-    }
+    p { font-size: 20px; }
   </style>
 
-  <!-- DOĞRU SIRA: önce ethers, sonra walletconnect, sonra web3modal -->
-  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+  <!-- DOĞRU SIRA — DOĞRU SÜRÜMLER -->
+  <script src="https://cdn.jsdelivr.net/npm/ethers@4.0.49/dist/ethers.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js"></script>
 
@@ -44,7 +40,7 @@
 
   <h1>🎳 Base Bowling</h1>
 
-  <img src="bowling.png" alt="Bowling">
+  <img src="bowling.png">
 
   <button id="connectWallet">Connect Wallet</button>
   <button id="spinBtn">SPIN 🎳</button>
