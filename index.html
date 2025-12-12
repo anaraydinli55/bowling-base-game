@@ -1,50 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8" />
   <title>Base Bowling / by anaraydinli</title>
+
   <style>
-    body { 
-      background-color: black; 
-      color: #9b59b6; 
-      text-align: center; 
+    body {
+      background: black;
+      color: #9b59b6;
       font-family: Arial, sans-serif;
+      text-align: center;
     }
-    img {
-      display: block;
-      margin: 20px auto;
-      width: 700px;
-      height: auto;
-    }
+    img { display:block; margin:20px auto; width:400px; height:auto; }
     button {
-      background-color: #9b59b6;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 10px;
-      border-radius: 8px;
+      background-color:#9b59b6; color:white; border:none; padding:10px 18px;
+      margin:8px; border-radius:8px; cursor:pointer; font-size:16px;
     }
+    small { display:block; color:#bbb; margin-top:6px; }
   </style>
-  <!-- Ethers.js ve Web3Modal CDN -->
+
+  <!-- Ethers + Web3Modal + WalletConnect -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.1/dist/ethers.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@web3modal/html@2.10.5/dist/index.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 </head>
 <body>
-
   <h1>Base Bowling</h1>
-
-  <!-- Büyük sabit görsel -->
-  <img src="bowling.png" alt="Bowling Game">
-
+  <img src="bowling.png" alt="Bowling" />
   <div>
     <button id="connectWallet">Connect Wallet</button>
-    <button id="throwBtn">Throw 🎳</button>
+    <button id="throwOffchainBtn">Throw (no gas — sign)</button>
+    <button id="throwOnchainBtn">Throw (on-chain)</button>
   </div>
 
   <p>XP: <span id="xp">0</span> | Throws: <span id="throws">0</span></p>
+  <small id="status">Status: not connected</small>
 
   <script src="script.js"></script>
 </body>
