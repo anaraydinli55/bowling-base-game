@@ -2,39 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Base Bowling / by anaraydinli</title>
+  <title>Base Bowling — Spin</title>
 
   <style>
     body {
-      background: black;
+      background: #000;
       color: #9b59b6;
       font-family: Arial, sans-serif;
       text-align: center;
+      margin-top: 40px;
     }
-    img { display:block; margin:20px auto; width:400px; height:auto; }
+    img { width: 380px; display:block; margin:20px auto; }
     button {
-      background-color:#9b59b6; color:white; border:none; padding:10px 18px;
-      margin:8px; border-radius:8px; cursor:pointer; font-size:16px;
+      background:#9b59b6; color:white;
+      border:none; padding:14px 25px;
+      border-radius:10px; cursor:pointer;
+      font-size:18px; margin-top:15px;
     }
-    small { display:block; color:#bbb; margin-top:6px; }
+    p { font-size:18px; }
+    small { color:#bbb; }
   </style>
 
-  <!-- Ethers + Web3Modal + WalletConnect -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.1/dist/ethers.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@web3modal/html@2.10.5/dist/index.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@walletconnect/web3-provider@1.8.0/dist/umd/index.min.js"></script>
 </head>
-<body>
-  <h1>Base Bowling</h1>
-  <img src="bowling.png" alt="Bowling" />
-  <div>
-    <button id="connectWallet">Connect Wallet</button>
-    <button id="throwOffchainBtn">Throw (no gas — sign)</button>
-    <button id="throwOnchainBtn">Throw (on-chain)</button>
-  </div>
 
-  <p>XP: <span id="xp">0</span> | Throws: <span id="throws">0</span></p>
-  <small id="status">Status: not connected</small>
+<body>
+  <h1>🎳 Base Bowling</h1>
+  <img src="bowling.png" />
+
+  <p>XP: <span id="xp">0</span> — Spins: <span id="spins">0</span></p>
+  <button id="spinButton">SPIN</button>
+
+  <small id="status">Not connected</small>
 
   <script src="script.js"></script>
 </body>
