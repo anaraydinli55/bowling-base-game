@@ -5,52 +5,51 @@
   <title>Bowling Spin</title>
   <style>
     body {
-      background-color: black;
-      color: #9b59b6; /* neon mor */
-      font-family: Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      background: black;
+      color: #9b59b6;
+      font-family: Arial;
       text-align: center;
     }
-    img {
-      width: 200px;
-      margin-bottom: 20px;
-    }
+    img { width: 600px; margin: 20px 0; }
     button {
-      padding: 10px 20px;
+      padding: 12px 20px;
       margin: 10px;
-      font-size: 16px;
-      cursor: pointer;
       border: 2px solid #9b59b6;
-      border-radius: 8px;
-      background-color: transparent;
+      background: transparent;
       color: #9b59b6;
-      transition: all 0.2s;
+      border-radius: 8px;
+      cursor: pointer;
     }
-    button:hover {
-      background-color: #9b59b6;
-      color: black;
-    }
-    .stats {
-      margin-top: 20px;
-      font-size: 18px;
-    }
+    button:hover { background: #9b59b6; color: black; }
   </style>
 </head>
+
 <body>
   <h1>Bowling Spin</h1>
-  <img src="bowling.png" alt="Bowling Ball">
+  <img src="bowling.png" />
 
+  <br />
   <button id="connectBtn">Connect Wallet</button>
-  <button id="spinBtn">Spin</button>
+  <button id="spinBtn">SPIN</button>
 
-  <div class="stats">
-    XP: <span id="xp">0</span> | Spins: <span id="spins">0</span>
-  </div>
+  <p>XP: <span id="xp">0</span> | Spins: <span id="spins">0</span></p>
 
-  <!-- Ethers + Web3Modal CDN -->
+  <!-- LIBRARIES -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/di
+  <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js"></script>
+
+  <!-- 🔥 INLINE SCRIPT -->
+  <script>
+    const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC";
+    const contractABI = ["function spin() public"];
+
+    let provider, signer, contract;
+    let xp = 0, spins = 0;
+
+    document.getElementById("connectBtn").onclick = async () => {
+      alert("Connect clicked"); // 🔥 TEST
+      const web3Modal = new Web3Modal.default();
+      const connection = await web3Modal.connect();
+      provider = new ethers.providers.Web3Provider(connection);
+      signer = provider.getSigner();
+      contract = new ethers.Contract(contractAddr
