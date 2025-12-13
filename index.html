@@ -1,55 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <title>Bowling Spin</title>
   <style>
-    body {
-      background: black;
-      color: #9b59b6;
-      font-family: Arial;
-      text-align: center;
-    }
-    img { width: 600px; margin: 20px 0; }
+    body { background:black; color:#9b59b6; text-align:center; font-family:Arial }
+    img { width:200px }
     button {
-      padding: 12px 20px;
-      margin: 10px;
-      border: 2px solid #9b59b6;
-      background: transparent;
-      color: #9b59b6;
-      border-radius: 8px;
-      cursor: pointer;
+      margin:10px; padding:12px 20px;
+      border:2px solid #9b59b6;
+      background:transparent; color:#9b59b6;
+      cursor:pointer;
     }
-    button:hover { background: #9b59b6; color: black; }
   </style>
 </head>
 
 <body>
   <h1>Bowling Spin</h1>
-  <img src="bowling.png" />
+  <img src="bowling.png">
 
-  <br />
+  <br>
   <button id="connectBtn">Connect Wallet</button>
   <button id="spinBtn">SPIN</button>
 
   <p>XP: <span id="xp">0</span> | Spins: <span id="spins">0</span></p>
 
-  <!-- LIBRARIES -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/web3modal@1.9.12/dist/index.js"></script>
 
-  <!-- 🔥 INLINE SCRIPT -->
   <script>
-    const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC";
-    const contractABI = ["function spin() public"];
+    alert("JS LOADED ✅"); // 🔥 ƏN VACİB TEST
 
-    let provider, signer, contract;
-    let xp = 0, spins = 0;
+    const contractAddress = "0xcBA969E50b65515Da6D504D6dc399a59878259eC";
+    const abi = ["function spin() public"];
+
+    let contract, xp=0, spins=0;
 
     document.getElementById("connectBtn").onclick = async () => {
-      alert("Connect clicked"); // 🔥 TEST
+      alert("Connect clicked");
       const web3Modal = new Web3Modal.default();
-      const connection = await web3Modal.connect();
-      provider = new ethers.providers.Web3Provider(connection);
-      signer = provider.getSigner();
-      contract = new ethers.Contract(contractAddr
+      const conn = await web3Modal.connect();
+      const provider = new ethers.providers.Web3Provider(conn);
+      const signer = provider.getSigner();
+      contract = new ethers.Contract(contractAddress, abi, signer);
+    };
+
+    document.getElementById("spinBtn").onclick = async () => {
+      alert("Spin clicked");
+      if (!contract) return alert("Connect wallet first");
+      const tx = await contract.spin();
+      await tx.wait();
+      xp += 5; spins++;
+      xpSpan.innerText = xp;
+      spinsSpan.innerText = spins;
+    };
+  </script>
+</body>
+</html>
